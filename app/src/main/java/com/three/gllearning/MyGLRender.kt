@@ -1,7 +1,11 @@
 package com.three.gllearning
 
+import android.graphics.SurfaceTexture
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView
+import com.three.gllearning.camera.CameraDrawer
+import com.three.gllearning.camera.CameraHelper
+import com.three.gllearning.geometric.Square
 import com.three.gllearning.geometric.Triangle
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
@@ -16,14 +20,23 @@ import javax.microedition.khronos.opengles.GL10
  * @Author:
  * @Date: </ModifyLog>
  */
-class MyGLRender: GLSurfaceView.Renderer {
+class MyGLRender(private val frameAvailableListener: SurfaceTexture.OnFrameAvailableListener) : GLSurfaceView.Renderer {
 
     private lateinit var triangle: Triangle
+    private lateinit var square: Square
+
+    private lateinit var cameraDrawer: CameraDrawer
+    private val cameraManager: CameraHelper = CameraHelper()
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         // 设置背景色为黑色
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f)
-        triangle = Triangle()
+//        triangle = Triangle()
+//        square = Square()
+        cameraDrawer = CameraDrawer()
+        cameraDrawer.getSurfaceTexture()?.setOnFrameAvailableListener(frameAvailableListener)
+        cameraManager.openCamera()
+        cameraManager.setPreviewTexture(cameraDrawer.getSurfaceTexture())
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
@@ -34,6 +47,11 @@ class MyGLRender: GLSurfaceView.Renderer {
     override fun onDrawFrame(gl: GL10?) {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
         // 绘制三角形
-        triangle.draw()
+//        triangle.draw()
+        // 绘制四边形
+//        square.draw()
+        cameraDrawer.getSurfaceTexture()?.updateTexImage()
+        cameraDrawer.draw()
+
     }
 }
