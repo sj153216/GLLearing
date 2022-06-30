@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,6 +9,17 @@
     <com.three.gllearning.MyGLSurfaceView
         android:id="@+id/gl_surface"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/preview"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:text="开始预览"
+        android:gravity="center"
+        android:textSize="24sp"
+        android:layout_gravity="center"
+        android:background="#E4CECE"/>
+
+</FrameLayout>
