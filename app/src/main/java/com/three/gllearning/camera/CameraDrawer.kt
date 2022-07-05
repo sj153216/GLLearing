@@ -2,7 +2,7 @@ package com.three.gllearning.camera
 
 import android.graphics.SurfaceTexture
 import android.opengl.GLES11Ext
-import android.opengl.GLES20
+import android.opengl.GLES30
 import com.three.gllearning.MyApplication
 import com.three.gllearning.R
 import com.three.gllearning.util.FileLoader
@@ -36,7 +36,7 @@ class CameraDrawer {
 
     )
 
-    // 顶点所对应的纹理坐标
+    // 顶点所对应的纹理坐标，摄像头的纹理跟普通的图片纹理坐标有所区别，相差90度，这里注意一下
     private var textureVertices = floatArrayOf(
         0f, 1f,      // top left
         1f, 1f,      // bottom left
@@ -91,24 +91,24 @@ class CameraDrawer {
         // 编译顶点着色器和片段着色器
         val vertexShaderCode: String =
             FileLoader.loadShader(R.raw.camera_vertex_shader, MyApplication.get().resources)
-        val vertexShader: Int = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode)
+        val vertexShader: Int = loadShader(GLES30.GL_VERTEX_SHADER, vertexShaderCode)
         val fragmentShaderCode: String =
             FileLoader.loadShader(R.raw.camera_fragment_shader, MyApplication.get().resources)
-        val fragmentShader: Int = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode)
+        val fragmentShader: Int = loadShader(GLES30.GL_FRAGMENT_SHADER, fragmentShaderCode)
 
         // glCreateProgram函数创建一个着色器程序，并返回新创建程序对象的ID引用
-        program = GLES20.glCreateProgram().also {
+        program = GLES30.glCreateProgram().also {
             // 把顶点着色器添加到程序对象
-            GLES20.glAttachShader(it, vertexShader)
+            GLES30.glAttachShader(it, vertexShader)
             // 把片段着色器添加到程序对象
-            GLES20.glAttachShader(it, fragmentShader)
+            GLES30.glAttachShader(it, fragmentShader)
             // 连接并创建一个可执行的OpenGL ES程序对象
-            GLES20.glLinkProgram(it)
+            GLES30.glLinkProgram(it)
         }
         val texture = OpenGLUtil.createTextures(
             GLES11Ext.GL_TEXTURE_EXTERNAL_OES, 1,
-            GLES20.GL_NEAREST, GLES20.GL_LINEAR,
-            GLES20.GL_CLAMP_TO_EDGE, GLES20.GL_CLAMP_TO_EDGE
+            GLES30.GL_NEAREST, GLES30.GL_LINEAR,
+            GLES30.GL_CLAMP_TO_EDGE, GLES30.GL_CLAMP_TO_EDGE
         )
         textureID = texture[0]
         cameraSurfaceTexture = SurfaceTexture(textureID)
@@ -120,47 +120,47 @@ class CameraDrawer {
 
     private fun loadShader(type: Int, shaderCode: String): Int {
         // glCreateShader函数创建一个顶点着色器或者片段着色器,并返回新创建着色器的ID引用
-        val shader = GLES20.glCreateShader(type)
+        val shader = GLES30.glCreateShader(type)
         // 把着色器和代码关联,然后编译着色器
-        GLES20.glShaderSource(shader, shaderCode)
-        GLES20.glCompileShader(shader)
+        GLES30.glShaderSource(shader, shaderCode)
+        GLES30.glCompileShader(shader)
         return shader
     }
 
     // 绘制
     fun draw() {
         // 激活着色器程序 Add program to OpenGL ES environment
-        GLES20.glUseProgram(program)
+        GLES30.glUseProgram(program)
         // 获取顶点着色器中的vPosition变量(因为之前已经编译过着色器代码,所以可以从着色器程序中获取);用唯一ID表示
-        val position = GLES20.glGetAttribLocation(program, "vPosition")
+        val position = GLES30.glGetAttribLocation(program, "vPosition")
         // 允许操作顶点对象position
-        GLES20.glEnableVertexAttribArray(position)
+        GLES30.glEnableVertexAttribArray(position)
         // 将顶点数据传递给position指向的vPosition变量;将顶点属性与顶点缓冲对象关联
-        GLES20.glVertexAttribPointer(
-            position, COORDS_PER_VERTEX, GLES20.GL_FLOAT,
+        GLES30.glVertexAttribPointer(
+            position, COORDS_PER_VERTEX, GLES30.GL_FLOAT,
             false, vertexStride, vertexBuffer
         )
         // 激活textureID对应的纹理单元
-        GLES20.glActiveTexture(textureID)
+        GLES30.glActiveTexture(textureID)
         // 绑定纹理
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureID)
+        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, textureID)
         // 获取顶点着色器中的inputTextureCoordinate变量(纹理坐标);用唯一ID表示
-        val textureCoordinate = GLES20.glGetAttribLocation(program, "inputTextureCoordinate")
+        val textureCoordinate = GLES30.glGetAttribLocation(program, "inputTextureCoordinate")
         // 允许操作纹理坐标inputTextureCoordinate变量
-        GLES20.glEnableVertexAttribArray(textureCoordinate)
+        GLES30.glEnableVertexAttribArray(textureCoordinate)
         // 将纹理坐标数据传递给inputTextureCoordinate变量
-        GLES20.glVertexAttribPointer(
-            textureCoordinate, COORDS_PER_TEXTURE_VERTEX, GLES20.GL_FLOAT,
+        GLES30.glVertexAttribPointer(
+            textureCoordinate, COORDS_PER_TEXTURE_VERTEX, GLES30.GL_FLOAT,
             false, textVertexStride, textureVerticesBuffer
         )
         // 按drawListBuffer中指定的顺序绘制四边形
-        GLES20.glDrawElements(
-            GLES20.GL_TRIANGLE_STRIP, drawOrder.size,
-            GLES20.GL_UNSIGNED_SHORT, drawListBuffer
+        GLES30.glDrawElements(
+            GLES30.GL_TRIANGLE_STRIP, drawOrder.size,
+            GLES30.GL_UNSIGNED_SHORT, drawListBuffer
         )
         // 操作完后,取消允许操作顶点对象position
-        GLES20.glDisableVertexAttribArray(position)
-        GLES20.glDisableVertexAttribArray(textureCoordinate)
+        GLES30.glDisableVertexAttribArray(position)
+        GLES30.glDisableVertexAttribArray(textureCoordinate)
 
     }
 
