@@ -1,6 +1,7 @@
 package com.three.gllearning
 
 import android.opengl.GLSurfaceView
+import android.util.Log
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
@@ -16,6 +17,7 @@ import javax.microedition.khronos.opengles.GL10
  */
 class MyRender : GLSurfaceView.Renderer {
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
+        Log.d("learning-gl", "onSurfaceCreated");
         nativeOnSurfaceCreated()
     }
 
@@ -30,13 +32,13 @@ class MyRender : GLSurfaceView.Renderer {
 
     companion object {
         init {
-            System.loadLibrary("native-lib")
+            System.loadLibrary("gllearning")
         }
     }
 
-    external fun nativeInit()
-    external fun nativeOnSurfaceCreated()
-    external fun nativeOnSurfaceChanged()
-    external fun nativeOnDrawFrame()
+    private external fun nativeInit()
+    private external fun nativeOnSurfaceCreated()
+    private external fun nativeOnSurfaceChanged()
+    private external fun nativeOnDrawFrame()
 
 }

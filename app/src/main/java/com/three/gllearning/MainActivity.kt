@@ -51,10 +51,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    companion object {
-        // Used to load the 'gllearning' library on application startup.
-        init {
-            System.loadLibrary("gllearning")
-        }
-    }
 }

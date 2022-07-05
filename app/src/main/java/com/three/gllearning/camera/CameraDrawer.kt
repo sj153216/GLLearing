@@ -112,6 +112,7 @@ class CameraDrawer {
         )
         textureID = texture[0]
         cameraSurfaceTexture = SurfaceTexture(textureID)
+        GLES30.GL_FLOAT_VEC3
     }
 
     fun getSurfaceTexture(): SurfaceTexture? {

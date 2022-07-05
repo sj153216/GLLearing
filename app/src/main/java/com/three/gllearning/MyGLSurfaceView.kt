@@ -17,11 +17,11 @@ import android.util.AttributeSet
  */
 class MyGLSurfaceView(context: Context?, attrs: AttributeSet?) : GLSurfaceView(context, attrs), SurfaceTexture.OnFrameAvailableListener {
 
-    private var glRender: MyGLRender
+    private var glRender: MyRender
 
     init {
         this.setEGLContextClientVersion(2)
-        glRender = MyGLRender(this)
+        glRender = MyRender()
         setRenderer(glRender)
         renderMode = RENDERMODE_CONTINUOUSLY
 
