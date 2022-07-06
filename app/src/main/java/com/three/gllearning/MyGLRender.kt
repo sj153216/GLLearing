@@ -1,12 +1,15 @@
 package com.three.gllearning
 
+import android.graphics.Bitmap
 import android.graphics.SurfaceTexture
 import android.opengl.GLES30
 import android.opengl.GLSurfaceView
 import com.three.gllearning.camera.CameraDrawer
 import com.three.gllearning.camera.CameraHelper
+import com.three.gllearning.geometric.BitmapSquare
 import com.three.gllearning.geometric.Square
 import com.three.gllearning.geometric.Triangle
+import com.three.gllearning.util.OpenGLUtil
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
@@ -22,8 +25,12 @@ import javax.microedition.khronos.opengles.GL10
  */
 class MyGLRender(private val frameAvailableListener: SurfaceTexture.OnFrameAvailableListener) : GLSurfaceView.Renderer {
 
+    private lateinit var bitmap: Bitmap
     private lateinit var triangle: Triangle
     private lateinit var square: Square
+    private lateinit var bitmapSquare: BitmapSquare
+    // 纹理ID
+    private var glTextureId = 0
 
     private lateinit var cameraDrawer: CameraDrawer
     private val cameraManager: CameraHelper = CameraHelper()
@@ -33,10 +40,15 @@ class MyGLRender(private val frameAvailableListener: SurfaceTexture.OnFrameAvail
         GLES30.glClearColor(0.0f, 0.0f, 0.0f, 1.0f)
 //        triangle = Triangle()
 //        square = Square()
-        cameraDrawer = CameraDrawer()
-        cameraDrawer.getSurfaceTexture()?.setOnFrameAvailableListener(frameAvailableListener)
-        cameraManager.openCamera()
-        cameraManager.setPreviewTexture(cameraDrawer.getSurfaceTexture())
+        bitmapSquare = BitmapSquare()
+        // 创建纹理
+        glTextureId = OpenGLUtil.createTexture(bitmap, GLES30.GL_NEAREST, GLES30.GL_NEAREST,
+            GLES30.GL_CLAMP_TO_EDGE, GLES30.GL_CLAMP_TO_EDGE)
+
+//        cameraDrawer = CameraDrawer()
+//        cameraDrawer.getSurfaceTexture()?.setOnFrameAvailableListener(frameAvailableListener)
+//        cameraManager.openCamera()
+//        cameraManager.setPreviewTexture(cameraDrawer.getSurfaceTexture())
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
@@ -50,8 +62,14 @@ class MyGLRender(private val frameAvailableListener: SurfaceTexture.OnFrameAvail
 //        triangle.draw()
         // 绘制四边形
 //        square.draw()
-        cameraDrawer.getSurfaceTexture()?.updateTexImage()
-        cameraDrawer.draw()
+//        cameraDrawer.getSurfaceTexture()?.updateTexImage()
+//        cameraDrawer.draw()
 
+        bitmapSquare.draw(glTextureId)
+
+    }
+
+    fun setImageBitmap(bitmap: Bitmap) {
+        this.bitmap = bitmap
     }
 }

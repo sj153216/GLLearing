@@ -1,6 +1,8 @@
 package com.three.gllearning.util
 
+import android.graphics.Bitmap
 import android.opengl.GLES30
+import android.opengl.GLUtils
 
 
 /**
@@ -48,5 +50,31 @@ object OpenGLUtil {
         }
         return textureHandles
     }
+
+    /**
+     * 根据bitmap创建2D纹理
+     * @param bitmap
+     * @param minFilter     缩小过滤类型 (1.GL_NEAREST ; 2.GL_LINEAR)
+     * @param magFilter     放大过滤类型
+     * @param wrapS         纹理S方向边缘环绕;也称作X方向
+     * @param wrapT         纹理T方向边缘环绕;也称作Y方向
+     * @return 返回创建的 Texture ID
+     */
+    fun createTexture(
+        bitmap: Bitmap?,
+        minFilter: Int,
+        magFilter: Int,
+        wrapS: Int,
+        wrapT: Int
+    ): Int {
+        val textureHandle =
+            createTextures(GLES30.GL_TEXTURE_2D, 1, minFilter, magFilter, wrapS, wrapT)
+        if (bitmap != null) {
+            // 4.把bitmap加载到纹理中
+            GLUtils.texImage2D(GLES30.GL_TEXTURE_2D, 0, bitmap, 0)
+        }
+        return textureHandle[0]
+    }
+
 
 }
