@@ -2,6 +2,7 @@ package com.three.gllearning
 
 import android.opengl.GLSurfaceView
 import android.util.Log
+import com.three.gllearning.util.FileLoader
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
@@ -16,9 +17,15 @@ import javax.microedition.khronos.opengles.GL10
  * @Date: </ModifyLog>
  */
 class MyRender : GLSurfaceView.Renderer {
+
+    private lateinit var vertexCode: String
+    private lateinit var fragmentCode: String
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         Log.d("learning-gl", "onSurfaceCreated");
-        nativeOnSurfaceCreated()
+        vertexCode = FileLoader.loadShader(R.raw.triangle_vertex_shader, MyApplication.get().resources)
+        fragmentCode = FileLoader.loadShader(R.raw.triangle_fragment_shader, MyApplication.get().resources)
+
+        nativeOnSurfaceCreated(vertexCode, fragmentCode)
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
@@ -37,7 +44,7 @@ class MyRender : GLSurfaceView.Renderer {
     }
 
     private external fun nativeInit()
-    private external fun nativeOnSurfaceCreated()
+    private external fun nativeOnSurfaceCreated(vertexCode: String, fragmentCode: String)
     private external fun nativeOnSurfaceChanged()
     private external fun nativeOnDrawFrame()
 

@@ -19,15 +19,19 @@ import android.util.AttributeSet
 class MyGLSurfaceView(context: Context?, attrs: AttributeSet?) : GLSurfaceView(context, attrs),
     SurfaceTexture.OnFrameAvailableListener {
 
-    private var glRender: MyGLRender
+    private var glRender: MyRender
 
     init {
+//        this.setEGLContextClientVersion(2)
+//        glRender = MyGLRender(this)
+//        setRenderer(glRender)
+//        renderMode = RENDERMODE_WHEN_DIRTY
+//        val bitmap = BitmapFactory.decodeResource(context?.resources, R.drawable.avatar)
+//        glRender.setImageBitmap(bitmap)
         this.setEGLContextClientVersion(2)
-        glRender = MyGLRender(this)
+        glRender = MyRender()
         setRenderer(glRender)
         renderMode = RENDERMODE_WHEN_DIRTY
-        val bitmap = BitmapFactory.decodeResource(context?.resources, R.drawable.avatar)
-        glRender.setImageBitmap(bitmap)
     }
 
     override fun onFrameAvailable(surfaceTexture: SurfaceTexture?) {
