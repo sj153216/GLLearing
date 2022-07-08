@@ -1,10 +1,8 @@
+#version 300 es
 precision mediump float;
-varying highp vec2 textureCoordinate;
+in vec2 textureCoordinate;
+layout(location = 0) out vec4 outColor;
 uniform sampler2D inputImageTexture;
-
-//uniform vec4 vColor;
-
-void main() {
-    // 将2D纹理inputImageTexture和纹理顶点坐标通过texture2D计算后传给片段着色器
-    gl_FragColor = texture2D(inputImageTexture, textureCoordinate);
+void main(){
+    outColor = texture(inputImageTexture, textureCoordinate);
 }

@@ -18,37 +18,41 @@ BitmapSquare::BitmapSquare(GLchar *shader_code, GLchar *fragment_code) {
 
 void BitmapSquare::init() {
     program = GLUtil::Create_program(vertexCode, fragmentCode, vertexShader, fragmentShader);
-    if (program == 0) {
-        return;
-    }
-    glUseProgram(program);
-
+    sample2D = glGetUniformLocation(program, "inputImageTexture");
+//    if (program == 0) {
+//        return;
+//    }
+//    glUseProgram(program);
+//
     if (texture_id == 0) {
         // 生成纹理id
         glGenTextures(1, &texture_id);
     }
-    LOGD("texture_id: %d", texture_id);
-    LOGD("img_data: %s", img_data);
 
-
-    glActiveTexture(texture_id);
     glBindTexture(GL_TEXTURE_2D, texture_id);
-
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    if (img_data != nullptr) {
-        LOGD("bind");
-
-        glTexImage2D(GL_TEXTURE_2D, 0, // level一般为0
-                     GL_RGBA, //纹理内部格式
-                     720, 1600, // 画面宽高
-                     0, // 必须为0
-                     GL_RGBA, // 数据格式，必须和上面的纹理格式保持一直
-                     GL_UNSIGNED_BYTE, // RGBA每位数据的字节数，这里是BYTE​: 1 byte
-                     img_data);// 画面数据
-    }
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, GL_NONE);
+//    LOGD("texture_id: %d", texture_id);
+//    LOGD("img_data: %s", img_data);
+//
+//
+//    glActiveTexture(texture_id);
+//    glBindTexture(GL_TEXTURE_2D, texture_id);
+//
+//    if (img_data != nullptr) {
+//        LOGD("bind");
+//
+//        glTexImage2D(GL_TEXTURE_2D, 0, // level一般为0
+//                     GL_RGBA, //纹理内部格式
+//                     720, 1600, // 画面宽高
+//                     0, // 必须为0
+//                     GL_RGBA, // 数据格式，必须和上面的纹理格式保持一直
+//                     GL_UNSIGNED_BYTE, // RGBA每位数据的字节数，这里是BYTE​: 1 byte
+//                     img_data);// 画面数据
+//    }
 
 }
 
@@ -118,47 +122,52 @@ void BitmapSquare::draw() {
 //    glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
 
 
-    float vertices[] = {
-            0.5f,  0.5f, 0.0f,  // top right
-            0.5f, -0.5f, 0.0f,  // bottom right
-            -0.5f, -0.5f, 0.0f,  // bottom left
-            -0.5f,  0.5f, 0.0f   // top left
+    GLfloat verticesCoords[] = {
+            -1.0f,  0.5f, 0.0f,  // Position 0
+            -1.0f, -0.5f, 0.0f,  // Position 1
+            1.0f, -0.5f, 0.0f,  // Position 2
+            1.0f,  0.5f, 0.0f,  // Position 3
     };
-    unsigned int indices[] = {  // note that we start from 0!
-            0, 1, 3,  // first Triangle
-            1, 2, 3   // second Triangle
+
+    GLfloat textureCoords[] = {
+            0.0f,  0.0f,        // TexCoord 0
+            0.0f,  1.0f,        // TexCoord 1
+            1.0f,  1.0f,        // TexCoord 2
+            1.0f,  0.0f         // TexCoord 3
     };
-    unsigned int VBO, VAO, EBO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-    // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-    glBindVertexArray(VAO);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    GLushort indices[] = { 0, 1, 2, 0, 2, 3 };
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    //upload RGBA image data
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture_id);
+    LOGD("last img: %zu", strlen(reinterpret_cast<const char *const>(img_data)));
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img_data);
+    glBindTexture(GL_TEXTURE_2D, GL_NONE);
 
-    int position = glGetAttribLocation(program, "vPosition");
-    LOGD("position: %d", position);
-    glVertexAttribPointer(position, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(position);
+    // Use the program object
+    glUseProgram (program);
+
+    // Load the vertex position
+    glVertexAttribPointer (0, 3, GL_FLOAT,
+                           GL_FALSE, 3 * sizeof (GLfloat), verticesCoords);
+    // Load the texture coordinate
+    glVertexAttribPointer (1, 2, GL_FLOAT,
+                           GL_FALSE, 2 * sizeof (GLfloat), textureCoords);
+
+    glEnableVertexAttribArray (0);
+    glEnableVertexAttribArray (1);
+
+    // Bind the RGBA map
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture_id);
 
 
-    int texture_position = glGetAttribLocation(program, "inputTextureCoordinate");
-    LOGD("texture_position: %d", texture_position);
 
-    glVertexAttribPointer(texture_position, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(texture_position);
+    // Set the RGBA map sampler to texture unit to 0
+    glUniform1i(sample2D, 0);
 
-//    glBindBuffer(GL_ARRAY_BUFFER, 0);
-//    glBindVertexArray(0);
-
-//    glBindVertexArray(VAO);
-    //glDrawArrays(GL_TRIANGLES, 0, 6);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
 
 
 

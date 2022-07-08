@@ -37,6 +37,8 @@ void BitmapUtil::processBitmap(JNIEnv *env, jobject jbitmap, unsigned char **res
 
     // 执行图片操作的逻辑
     size_t length = info.stride * info.height;
+    *width = info.width;
+    *height = info.height;
     LOGD("length: %zu", length);
 
     *resultData = static_cast<unsigned char *>(malloc(length * sizeof(unsigned char)));

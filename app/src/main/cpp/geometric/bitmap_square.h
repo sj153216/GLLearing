@@ -37,6 +37,7 @@ private:
     GLuint texture_id = 0;
 
     int program; // 着色器程序ID引用
+    GLint sample2D;
     int vertexCount =
             sizeof(vertex_coordinate) / sizeof(vertex_coordinate[0]) / COORDS_PER_VERTEX; // 顶点数量
     int vertexStride = COORDS_PER_VERTEX * 4; // 顶点之间的步长
