@@ -24,6 +24,13 @@ Triangle::~Triangle() {
         glDeleteProgram(program);
     }
 
+    if (vertexCode) {
+        vertexCode = nullptr;
+    }
+    if (fragmentCode) {
+        fragmentCode = nullptr;
+    }
+
 }
 
 void Triangle::draw() {
@@ -49,9 +56,9 @@ Triangle *Triangle::Get_instance() {
     return instance;
 }
 
-void Triangle::setShaderCode(const GLchar *vertexCode, const GLchar *fragmentCode) {
-    this->vertexCode = vertexCode;
-    this->fragmentCode = fragmentCode;
+void Triangle::setShaderCode(const GLchar *vertex_code, const GLchar *fragment_code) {
+    this->vertexCode = vertex_code;
+    this->fragmentCode = fragment_code;
 }
 
 void Triangle::init() {

@@ -1,5 +1,7 @@
 package com.three.gllearning
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.opengl.GLSurfaceView
 import android.util.Log
 import com.three.gllearning.util.FileLoader
@@ -16,15 +18,17 @@ import javax.microedition.khronos.opengles.GL10
  * @Author:
  * @Date: </ModifyLog>
  */
-class MyRender : GLSurfaceView.Renderer {
+class MyRender() : GLSurfaceView.Renderer {
 
     private lateinit var vertexCode: String
     private lateinit var fragmentCode: String
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         Log.d("learning-gl", "onSurfaceCreated");
-        vertexCode = FileLoader.loadShader(R.raw.triangle_vertex_shader, MyApplication.get().resources)
-        fragmentCode = FileLoader.loadShader(R.raw.triangle_fragment_shader, MyApplication.get().resources)
+        vertexCode = FileLoader.loadShader(R.raw.vertex_shader, MyApplication.get().resources)
+        fragmentCode = FileLoader.loadShader(R.raw.fragment_shader, MyApplication.get().resources)
 
+        val bitmap = BitmapFactory.decodeResource(MyApplication.get().resources, R.drawable.img)
+        native_texImage2D(bitmap)
         nativeOnSurfaceCreated(vertexCode, fragmentCode)
     }
 
@@ -47,5 +51,7 @@ class MyRender : GLSurfaceView.Renderer {
     private external fun nativeOnSurfaceCreated(vertexCode: String, fragmentCode: String)
     private external fun nativeOnSurfaceChanged()
     private external fun nativeOnDrawFrame()
+
+    private external fun native_texImage2D(bitmap: Bitmap)
 
 }

@@ -29,8 +29,8 @@ private:
             sizeof(vertex_coordinate) / sizeof(vertex_coordinate[0]) / COORDS_PER_VERTEX; // 顶点数量
     int vertexStride = COORDS_PER_VERTEX * 4; // 顶点之间的步长
 
-    const GLchar *vertexCode; // 顶点着色器代码
-    const GLchar *fragmentCode; // 片段着色器代码
+    const GLchar *vertexCode = 0; // 顶点着色器代码
+    const GLchar *fragmentCode = 0; // 片段着色器代码
     GLuint vertexShader; // 顶点着色器句柄
     GLuint fragmentShader; // 片段着色器句柄
 

@@ -37,6 +37,7 @@ GLint GLUtil::Load_shader(GLenum type, const GLchar *shader_code) {
 // 创建着色器程序
 GLint GLUtil::Create_program(const GLchar *pVertexShaderSource, const GLchar *pFragShaderSource,
                      GLuint &vertexShaderHandle, GLuint &fragShaderHandle) {
+
     GLuint program = 0;
     vertexShaderHandle = Load_shader(GL_VERTEX_SHADER, pVertexShaderSource);
     if (!vertexShaderHandle) {
@@ -64,6 +65,8 @@ GLint GLUtil::Create_program(const GLchar *pVertexShaderSource, const GLchar *pF
         fragShaderHandle = 0;
 
         if (linkStatus != GL_TRUE) {
+            LOGD("not true");
+
             GLint bufLength = 0;
             glGetProgramiv(program, GL_INFO_LOG_LENGTH, &bufLength);
             if (bufLength) {

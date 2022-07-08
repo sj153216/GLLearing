@@ -30,7 +30,9 @@ add_library( # Sets the name of the library.
         # Provides a relative path to your source file(s).
         native-lib.cpp
         geometric/Triangle.cpp
-        util/gl_util.cpp)
+        util/gl_util.cpp
+        geometric/bitmap_square.cpp
+        util/bitmap_util.cpp)
 
 
 
@@ -52,6 +54,7 @@ find_library( # Sets the name of the path variable.
 
 target_link_libraries( # Specifies the target library.
         gllearning
+        jnigraphics
         ${gl}
 
         # Links the target library to the log library

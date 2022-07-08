@@ -1,6 +1,6 @@
+precision mediump float;
 varying highp vec2 textureCoordinate;
 uniform sampler2D inputImageTexture;
-precision mediump float;
 
 //uniform vec4 vColor;
 
