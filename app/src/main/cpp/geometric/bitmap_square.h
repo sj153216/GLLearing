@@ -7,6 +7,7 @@
 
 #include "util/gl_util.h"
 #include <android/bitmap.h>
+#include "../soil/SOIL.h"
 
 
 class BitmapSquare{
@@ -49,8 +50,9 @@ private:
     GLuint fragmentShader; // 片段着色器句柄
 
     unsigned char *img_data = nullptr;
-    unsigned int width;
-    unsigned int height;
+    int width;
+    int height;
+    unsigned char *file_path = nullptr;
 
 
 
@@ -72,6 +74,7 @@ public:
     void set_image(unsigned char *data, unsigned int width, unsigned int height);
 
 
+    void set_path(unsigned char *path);
 
     static BitmapSquare *Get_instance();
 

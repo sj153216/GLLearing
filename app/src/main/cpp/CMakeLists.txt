@@ -12,7 +12,6 @@ project("gllearning")
 #find_path(GLES3_INCLUDE_DIR GLES2/gl3.h
 #        HINTS ${ANDROID_NDK})
 
-message("sj" + ${CMAKE_SOURCE_DIR})
 
 
 include_directories(
@@ -34,7 +33,18 @@ add_library( # Sets the name of the library.
         geometric/bitmap_square.cpp
         util/bitmap_util.cpp)
 
+#设置so库路径
+set(my_lib_path ${CMAKE_SOURCE_DIR}/../../../libs)
 
+#将第三方库作为动态库引用
+add_library(soil
+        SHARED
+        IMPORTED)
+
+#指定第三方库的绝对路径
+set_target_properties(soil
+        PROPERTIES IMPORTED_LOCATION
+        ${my_lib_path}/${ANDROID_ABI}/libsoil.so)
 
 
 find_library( # Sets the name of the path variable.
@@ -55,6 +65,7 @@ find_library( # Sets the name of the path variable.
 target_link_libraries( # Specifies the target library.
         gllearning
         jnigraphics
+        soil
         ${gl}
 
         # Links the target library to the log library

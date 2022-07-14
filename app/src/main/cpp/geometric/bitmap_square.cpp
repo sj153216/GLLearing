@@ -4,6 +4,7 @@
 
 #include <util/LogUtil.h>
 #include "bitmap_square.h"
+#include "glm_util.h"
 
 BitmapSquare *BitmapSquare::instance = nullptr;
 
@@ -35,24 +36,6 @@ void BitmapSquare::init() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glBindTexture(GL_TEXTURE_2D, GL_NONE);
-//    LOGD("texture_id: %d", texture_id);
-//    LOGD("img_data: %s", img_data);
-//
-//
-//    glActiveTexture(texture_id);
-//    glBindTexture(GL_TEXTURE_2D, texture_id);
-//
-//    if (img_data != nullptr) {
-//        LOGD("bind");
-//
-//        glTexImage2D(GL_TEXTURE_2D, 0, // level一般为0
-//                     GL_RGBA, //纹理内部格式
-//                     720, 1600, // 画面宽高
-//                     0, // 必须为0
-//                     GL_RGBA, // 数据格式，必须和上面的纹理格式保持一直
-//                     GL_UNSIGNED_BYTE, // RGBA每位数据的字节数，这里是BYTE​: 1 byte
-//                     img_data);// 画面数据
-//    }
 
 }
 
@@ -96,30 +79,6 @@ void BitmapSquare::draw() {
         return;
     }
     glUseProgram(program);
-
-
-    LOGD("program: %d", program);
-
-//    // 顶点
-//    int position = glGetAttribLocation(program, "vPosition");
-//    LOGD("position: %d", position);
-//
-//    glEnableVertexAttribArray(position);
-//    glVertexAttribPointer(position, COORDS_PER_VERTEX, GL_FLOAT, GL_FALSE, 0,
-//                          vertex_coordinate);
-//
-//    // 纹理顶点
-//    int texture_position = glGetAttribLocation(program, "inputTextureCoordinate");
-//    LOGD("texture_position: %d", texture_position);
-//
-//    glEnableVertexAttribArray(texture_position);
-//    glVertexAttribPointer(texture_position, COORDS_PER_TEXTURE_VERTEX, GL_FLOAT, GL_FALSE,
-//                          0,
-//                          tex_vertex);
-//
-//
-//    glDrawElements(GL_TRIANGLE_STRIP, 6, GL_UNSIGNED_INT, 0);
-//    glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
 
 
     GLfloat verticesCoords[] = {
@@ -177,4 +136,9 @@ void BitmapSquare::set_image(unsigned char *data, unsigned int img_width, unsign
     this->img_data = data;
     this->width = img_width;
     this->height = img_height;
+}
+
+void BitmapSquare::set_path(unsigned char *path) {
+    this->file_path = path;
+
 }

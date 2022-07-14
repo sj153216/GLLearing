@@ -42,7 +42,7 @@ Java_com_three_gllearning_MyRender_nativeOnDrawFrame(JNIEnv *env, jobject thiz) 
 }
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_three_gllearning_MyRender_native_1texImage2D(JNIEnv *env, jobject thiz, jobject bitmap) {
+Java_com_three_gllearning_MyRender_native_1texImage2D(JNIEnv *env, jobject thiz, jobject bitmap, jstring path) {
 
     unsigned char *resultData;
     unsigned int width;
@@ -51,5 +51,4 @@ Java_com_three_gllearning_MyRender_native_1texImage2D(JNIEnv *env, jobject thiz,
     bitmapUtil.processBitmap(env ,bitmap, &resultData, &width, &height);
     LOGD("processBitmap: %s", resultData);
 
-    BitmapSquare::Get_instance()->set_image(resultData, width, height);
 }

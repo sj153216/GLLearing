@@ -3,6 +3,7 @@ package com.three.gllearning
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.opengl.GLSurfaceView
+import android.os.Environment
 import android.util.Log
 import com.three.gllearning.util.FileLoader
 import javax.microedition.khronos.egl.EGLConfig
@@ -28,7 +29,7 @@ class MyRender() : GLSurfaceView.Renderer {
         fragmentCode = FileLoader.loadShader(R.raw.fragment_shader, MyApplication.get().resources)
 
         val bitmap = BitmapFactory.decodeResource(MyApplication.get().resources, R.drawable.img)
-        native_texImage2D(bitmap)
+        native_texImage2D(bitmap, Environment.getExternalStorageDirectory().absolutePath)
         nativeOnSurfaceCreated(vertexCode, fragmentCode)
     }
 
@@ -52,6 +53,6 @@ class MyRender() : GLSurfaceView.Renderer {
     private external fun nativeOnSurfaceChanged()
     private external fun nativeOnDrawFrame()
 
-    private external fun native_texImage2D(bitmap: Bitmap)
+    private external fun native_texImage2D(bitmap: Bitmap, path: String)
 
 }
