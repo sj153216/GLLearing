@@ -50,5 +50,7 @@ Java_com_three_gllearning_MyRender_native_1texImage2D(JNIEnv *env, jobject thiz,
     BitmapUtil bitmapUtil;
     bitmapUtil.processBitmap(env ,bitmap, &resultData, &width, &height);
     LOGD("processBitmap: %s", resultData);
+    BitmapSquare::Get_instance()->set_image(resultData, width, height);
+
 
 }

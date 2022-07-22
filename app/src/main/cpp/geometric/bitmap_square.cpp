@@ -5,6 +5,7 @@
 #include <util/LogUtil.h>
 #include "bitmap_square.h"
 #include "glm_util.h"
+#include "stdlib.h"
 
 BitmapSquare *BitmapSquare::instance = nullptr;
 
@@ -75,6 +76,7 @@ BitmapSquare *BitmapSquare::Get_instance() {
 }
 
 void BitmapSquare::draw() {
+
     if (program == 0) {
         return;
     }
@@ -82,20 +84,20 @@ void BitmapSquare::draw() {
 
 
     GLfloat verticesCoords[] = {
-            -1.0f,  0.5f, 0.0f,  // Position 0
+            -1.0f, 0.5f, 0.0f,  // Position 0
             -1.0f, -0.5f, 0.0f,  // Position 1
             1.0f, -0.5f, 0.0f,  // Position 2
-            1.0f,  0.5f, 0.0f,  // Position 3
+            1.0f, 0.5f, 0.0f,  // Position 3
     };
 
     GLfloat textureCoords[] = {
-            0.0f,  0.0f,        // TexCoord 0
-            0.0f,  1.0f,        // TexCoord 1
-            1.0f,  1.0f,        // TexCoord 2
-            1.0f,  0.0f         // TexCoord 3
+            0.0f, 0.0f,        // TexCoord 0
+            0.0f, 1.0f,        // TexCoord 1
+            1.0f, 1.0f,        // TexCoord 2
+            1.0f, 0.0f         // TexCoord 3
     };
 
-    GLushort indices[] = { 0, 1, 2, 0, 2, 3 };
+    GLushort indices[] = {0, 1, 2, 0, 2, 3};
 
     //upload RGBA image data
     glActiveTexture(GL_TEXTURE0);
@@ -105,17 +107,17 @@ void BitmapSquare::draw() {
     glBindTexture(GL_TEXTURE_2D, GL_NONE);
 
     // Use the program object
-    glUseProgram (program);
+    glUseProgram(program);
 
     // Load the vertex position
-    glVertexAttribPointer (0, 3, GL_FLOAT,
-                           GL_FALSE, 3 * sizeof (GLfloat), verticesCoords);
+    glVertexAttribPointer(0, 3, GL_FLOAT,
+                          GL_FALSE, 3 * sizeof(GLfloat), verticesCoords);
     // Load the texture coordinate
-    glVertexAttribPointer (1, 2, GL_FLOAT,
-                           GL_FALSE, 2 * sizeof (GLfloat), textureCoords);
+    glVertexAttribPointer(1, 2, GL_FLOAT,
+                          GL_FALSE, 2 * sizeof(GLfloat), textureCoords);
 
-    glEnableVertexAttribArray (0);
-    glEnableVertexAttribArray (1);
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
 
     // Bind the RGBA map
     glActiveTexture(GL_TEXTURE0);
@@ -127,7 +129,6 @@ void BitmapSquare::draw() {
     glUniform1i(sample2D, 0);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
-
 
 
 }
